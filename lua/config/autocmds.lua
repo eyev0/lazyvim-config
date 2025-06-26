@@ -60,9 +60,9 @@ api.nvim_create_autocmd({ "User" }, {
     else
       table.insert(sources, { name = "cmdline", group_index = 1, priority = 4 })
     end
-    require("cmp").setup.buffer({
-      sources = sources,
-    })
+    -- require("cmp").setup.buffer({
+    --   sources = sources,
+    -- })
   end,
 })
 

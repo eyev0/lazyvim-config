@@ -8,3 +8,11 @@ vim.opt.spelllang = { "en", "ru_ru" }
 vim.opt.spelloptions = ""
 
 vim.g.autoformat = false
+
+vim.opt.swapfile = false
+vim.opt.undofile = true
+-- not working
+-- vim.opt.mouse = "nvic"
+
+-- snacks.nvim
+vim.g.snacks_scroll = false

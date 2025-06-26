@@ -18,9 +18,6 @@ require("lazy").setup({
   spec = {
     -- add LazyVim and import its plugins
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
-    { import = "lazyvim.plugins.extras.lsp.neoconf" },
-    { import = "lazyvim.plugins.extras.lsp.none-ls" },
-    { import = "lazyvim.plugins.extras.test.core" },
     -- import/override with your plugins
     { import = "plugins" },
   },
@@ -44,7 +41,7 @@ require("lazy").setup({
       disabled_plugins = {
         "gzip",
         -- "matchit",
-        -- "matchparen",
+        "matchparen",
         -- "netrwPlugin",
         "tarPlugin",
         "tohtml",

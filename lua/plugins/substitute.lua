@@ -1,3 +1,4 @@
 return {
-    "gbprod/substitute.nvim",
+  "gbprod/substitute.nvim",
+  config = true,
 }
