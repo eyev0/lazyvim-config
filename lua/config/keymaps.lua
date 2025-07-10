@@ -175,6 +175,7 @@ map("n", "<leader>gb", ":Gitsigns blame<CR>", { noremap = true, silent = true, d
 
 local gitlab = require("gitlab")
 map("n", "<leader>girr", gitlab.review, { noremap = true, silent = true, desc = "gitlab: review" })
+map("n", "<leader>girc", gitlab.choose_merge_request, { noremap = true, silent = true, desc = "gitlab: choose_merge_request" })
 map("n", "<leader>gis", gitlab.summary, { noremap = true, silent = true, desc = "gitlab: summary" })
 map("n", "<leader>giA", gitlab.approve, { noremap = true, silent = true, desc = "gitlab: approve" })
 map("n", "<leader>giR", gitlab.revoke, { noremap = true, silent = true, desc = "gitlab: revoke" })
