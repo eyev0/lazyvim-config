@@ -31,12 +31,11 @@ O = {
     -- vim.cmd("vsplit +enew")
     -- vim.cmd("NvimTreeClose")
   end,
-  -- copilot = true,
   ft = {
     go = {
-      expandtab = false,
+      expandtab = true,
       shiftwidth = 4,
-      tabstop = 4,
+      tabstop = 8,
       softtabstop = 4,
     },
   },
@@ -44,4 +43,9 @@ O = {
   vis_modes = { "v", "V", "vs", "Vs", "CTRL-V", "CTRL-Vs" },
   ins_modes = { "i", "ic", "ix" },
 }
+
+if vim.g.neovide then
+  vim.api.nvim_set_current_dir(vim.env.PWD)
+end
+
 require("config.lazy")

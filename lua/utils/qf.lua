@@ -73,7 +73,7 @@ autocmd("BufWinEnter", {
       -- setlocal errorformat=%f\|%l\ col\ %c\|%m
       api.nvim_win_set_height(0, get_qf_height(#vim.fn.getqflist()))
       vim.cmd("wincmd J")
-      require("todo-comments.highlight").highlight_win(0, true)
+      -- require("todo-comments.highlight").highlight_win(0, true)
     end
   end,
 })
