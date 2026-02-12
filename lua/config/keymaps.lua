@@ -1,22 +1,24 @@
-local M = {}
 -- Keymaps are automatically loaded on the VeryLazy event
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 local map = vim.keymap.set
+
 local feedkeys = function(keys, mode)
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keys, true, true, true), mode, false)
 end
+
 -- local api = vim.api
 local cmd = vim.cmd
 local fn = vim.fn
-local qf = require("utils.qf")
 
 -- terminal NEOVIM
 if not vim.g.vscode then
   -- quickfix stuff
   -- Open quickfix list at the bottom of the screen
-  map("n", "<C-q><C-q>", [[:cclose<CR>]], { noremap = true, silent = true })
-  map("n", "<C-q><C-o>", qf.open, { noremap = true, silent = true, desc = "Open quickfix" })
+  local qf = require("utils.qf")
+  -- map("n", "<C-q><C-q>", qf.close, { noremap = true, silent = true })
+  map("n", "<C-q><C-o>", qf.toggle_quickfix, { noremap = true, silent = true, desc = "Toggle quickfix" })
+  -- map("n", "<C-q><C-l>", qf.toggle_loclist, { noremap = true, silent = true, desc = "Toggle location list" })
   map("n", "<C-q><C-n>", function()
     pcall(cmd, "cnewer")
   end, { noremap = true, silent = true, desc = "Next qf list" })
@@ -51,62 +53,6 @@ if not vim.g.vscode then
   map("n", "<C-S-P>", function()
     pcall(cmd, "cabove")
   end, { noremap = true, silent = true, desc = "Go to prev item in qf in this file" })
-
-  -- tmux navigation
-  map({ "n", "t" }, "<C-h>", function()
-    cmd("TmuxNavigateLeft")
-  end, { noremap = true, silent = true })
-  map({ "n", "t" }, "<C-j>", function()
-    cmd("TmuxNavigateDown")
-  end, { noremap = true, silent = true })
-  map({ "n", "t" }, "<C-k>", function()
-    cmd("TmuxNavigateUp")
-  end, { noremap = true, silent = true })
-  map({ "n", "t" }, "<C-l>", function()
-    cmd("TmuxNavigateRight")
-  end, { noremap = true, silent = true })
-
-  -- cmdbuf
-  local cmdbuf = require("cmdbuf")
-  map({ "n", "v" }, "qo", function()
-    cmdbuf.split_open(vim.o.cmdwinheight)
-    cmd("normal! G")
-  end, { noremap = true, silent = true, nowait = true })
-  map("c", "<C-e>", function()
-    cmdbuf.split_open(vim.o.cmdwinheight, { line = fn.getcmdline(), column = fn.getcmdpos() })
-    feedkeys("<C-c>", "n")
-  end)
-  map("n", "ql", function()
-    cmdbuf.split_open(vim.o.cmdwinheight, { type = "lua/cmd" })
-    cmd("normal! G")
-  end, { noremap = true, silent = true, nowait = true })
-
-  map("n", "q/", function()
-    cmdbuf.split_open(vim.o.cmdwinheight, { type = "vim/search/forward" })
-    cmd("normal! G")
-  end)
-  map("n", "q?", function()
-    cmdbuf.split_open(vim.o.cmdwinheight, { type = "vim/search/backward" })
-    cmd("normal! G")
-  end)
-
-  function M.cmdwin_maps()
-    map("n", "<Esc>", [[<Cmd>quit<CR>]], { noremap = true, silent = true, buffer = true })
-    map("n", "q", [[<Cmd>quit<CR>]], { nowait = true, buffer = true })
-    map("n", "dd", cmdbuf.delete, { buffer = true })
-    map({ "n", "i" }, "<C-c>", cmdbuf.cmdline_expr, { buffer = true, expr = true })
-    map("n", "<C-k>", [[<Cmd>quit<CR>]], { nowait = true, buffer = true })
-    map({ "n", "i" }, "<C-t>", function()
-      local cursor = api.nvim_win_get_cursor(0)
-      local line = api.nvim_buf_get_lines(0, cursor[1] - 1, cursor[1], false)[1]
-      local command = vim.bo.filetype == "lua" and ("lua " .. line) or line
-      vim.notify(command)
-      cmd("stopinsert")
-      cmd("wincmd p")
-      require("noice").redirect(command, { { filter = { event = "msg_show" }, view = "popup" } })
-      cmd("wincmd p")
-    end, { noremap = true, silent = true, desc = "Execute command under cursor in previous buffer", buffer = true })
-  end
 
   map("n", "<leader>gd", ":DiffviewOpen<CR>", { noremap = true, silent = true, desc = "Open diffview" })
   map(
@@ -203,7 +149,9 @@ if not vim.g.vscode then
     end
     term_direction = direction
   end
-  map({ "n", "t" }, "<C-_>", function()
+  -- which-key somehow overrides this
+  -- vim.keymap.del("n", "<C-/>")
+  map({ "n", "t" }, "<C-/>", function()
     toggleterm(nil, "horizontal")
   end, { noremap = true, silent = true })
   map({ "n", "t" }, "<M-C-_>", function()
@@ -211,7 +159,23 @@ if not vim.g.vscode then
   end, { noremap = true, silent = true })
 
   -- Projects
-  map("n", "<leader>Pa", ":AddProject<CR>",  { noremap = true, silent = true, desc = "Projects: Add"})
+  map("n", "<leader>Pa", ":AddProject<CR>", { noremap = true, silent = true, desc = "Projects: Add" })
+
+  -- claude
+  map("n", "<leader>co", "<cmd>ClaudeCodeContinue<CR>", { desc = "Toggle Claude Code" })
+
+  vim.keymap.del("n", "gra")
+  vim.keymap.del("n", "gri")
+  vim.keymap.del("n", "grn")
+  vim.keymap.del("n", "grr")
+  vim.keymap.del("n", "grt")
+
+  map({ "n", "x" }, "<leader>lf", function()
+    LazyVim.format({ force = true })
+  end, { desc = "Format" })
+  vim.keymap.del("n", "<leader>cf")
+
+  vim.keymap.del("n", "<leader>l")
 end
 
 -- d - delete
@@ -280,22 +244,14 @@ map("i", "<", [[<<C-g>u]], { noremap = false, silent = true })
 map("i", ">", [[><C-g>u]], { noremap = false, silent = true })
 map("i", ":", [[:<C-g>u]], { noremap = false, silent = true })
 
-local function map_cmd(modes, key, seq, opts)
-  -- local mod = "A"
-  -- if vim.g.neovide then
-  local  mod = "D"
-  -- end
-  map(modes, "<" .. mod .. "-" .. key .. ">", seq, opts)
-end
 -- normal mode in terminal
 -- map("t", "<C-]>", "<C-\\><C-n>", { noremap = true, silent = true })
 map("t", "<D-i>", "<C-\\><C-n>", { noremap = true, silent = true })
 map("t", "<D-ш>", "<C-\\><C-n>", { noremap = true, silent = true })
+map("t", "<C-]>", "<C-\\><C-n>", { noremap = true, silent = true })
 -- map_cmd("t", "i", "<C-\\><C-n>", { noremap = true, silent = true })
 -- map_cmd("t", "ш", "<C-\\><C-n>", { noremap = true, silent = true })
 
 -- Move selected line / block of text in visual mode
 map("x", "J", ":move '>+1<CR>gv", { noremap = true, silent = true })
 map("x", "K", ":move '<-2<CR>gv", { noremap = true, silent = true })
-
-return M

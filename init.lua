@@ -35,7 +35,7 @@ O = {
     go = {
       expandtab = true,
       shiftwidth = 4,
-      tabstop = 8,
+      tabstop = 4,
       softtabstop = 4,
     },
   },
@@ -44,8 +44,12 @@ O = {
   ins_modes = { "i", "ic", "ix" },
 }
 
-if vim.g.neovide then
-  vim.api.nvim_set_current_dir(vim.env.PWD)
+-- if vim.g.neovide then
+--   vim.api.nvim_set_current_dir(vim.env.PWD)
+-- end
+
+_G.pprint = function(...)
+  print(vim.inspect(...))
 end
 
 require("config.lazy")

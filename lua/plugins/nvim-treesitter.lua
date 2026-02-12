@@ -1,5 +1,11 @@
 return {
   "nvim-treesitter/nvim-treesitter",
-  -- commit = "f7955203bb16eed15f9e0fbf7e39b86e0de96b47",
   lazy = true,
+  opts = function(_, opts)
+    opts.ensure_installed = opts.ensure_installed or {}
+    local skip = { vim = true, vimdoc = true }
+    opts.ensure_installed = vim.tbl_filter(function(lang)
+      return not skip[lang]
+    end, opts.ensure_installed)
+  end,
 }
