@@ -3,4 +3,5 @@ return {
   dependencies = {
     "kana/vim-textobj-user",
   },
+  enabled = false,
 }
