@@ -26,3 +26,5 @@ vim.opt.mouse = "nvic"
 vim.g.snacks_scroll = false
 
 vim.o.guifont="SauceCodePro Nerd Font Mono"
+
+vim.o.exrc = true

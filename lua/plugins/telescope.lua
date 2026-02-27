@@ -46,14 +46,30 @@ return {
             -- preview_width = 0.6,
           },
           follow = true,
+          vimgrep_arguments = {
+            "rg",
+            "--color=never",
+            "--no-heading",
+            "--with-filename",
+            "--line-number",
+            "--column",
+            "--smart-case",
+            "--hidden",
+          },
         },
         pickers = {
           find_files = {
             layout_config = {
               preview_width = 0.6,
             },
+            hidden = true,
+            no_ignore = true,
+            no_ignore_parent = true,
           },
           live_grep = {
+            hidden = true,
+            no_ignore = true,
+            no_ignore_parent = true,
             layout_strategy = "vertical",
             layout_config = {
               prompt_position = "top",
